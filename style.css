@@ -68,6 +68,27 @@ h1, h2 {
   background: #e91e63;
 }
 
+/* क्रेडिट */
+.credit {
+  text-align: center;
+  font-size: 14px;
+  margin-top: 10px;
+  color: #aaa;
+}
+
+/* वार्निंग बॉक्स */
+.warning-box {
+  text-align: center;
+  font-size: 12px;
+  margin-top: 10px;
+  padding: 8px;
+  background: #ff5722;
+  color: #fff;
+  border-radius: 5px;
+  width: fit-content;
+  margin: 10px auto;
+}
+
 /* Video.js स्टाइल ओवरराइड (ऑप्शनल) */
 .video-js .vjs-control-bar {
   background: rgba(0,0,0,0.7);
