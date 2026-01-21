@@ -1,78 +1,128 @@
-<!DOCTYPE html>
-<html lang="hi">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>4K लोकल वीडियो प्लेयर - एडवांस फीचर्स</title>
-  <!-- Video.js CDN -->
-  <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
+// Video.js इनिशियलाइज
+const player = videojs('my-video', {
+  fluid: true,  // रेस्पॉन्सिव (Android ऑप्टिमाइज)
+  controls: true,
+  playbackRates: [0.25, 0.5, 1, 1.5, 2, 4, 8],
+  techOrder: ['html5'],
+  preload: 'metadata'  // बड़े वीडियो के लिए फिक्स
+});
 
-  <div class="container">
-    <h1>एडवांस 4K लोकल वीडियो प्लेयर</h1>
+// Seek थंबनेल प्रिव्यू ऐड (स्प्राइट इमेज यूज करो – अपना URL बदलो)
+player.spriteThumbnails({
+  interval: 1,  // हर सेकंड का थंबनेल
+  url: 'https://example.com/thumbnails-sprite.jpg',  // अपना स्प्राइट इमेज URL (FFmpeg से बना लो)
+  width: 160,   // थंबनेल विड्थ
+  height: 90    // थंबनेल हाइट
+});
 
-    <!-- मुख्य प्लेयर -->
-    <div class="player-section">
-      <video id="my-video" class="video-js vjs-big-play-centered" controls preload="auto" width="100%" height="500" poster="poster.jpg">
-        <!-- डिफॉल्ट सोर्स (टेस्ट के लिए, लोकल अपलोड के बाद चेंज होगा) -->
-        <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
-        <!-- मल्टीपल क्वालिटी ऐड करने का एक्जाम्पल (अपनी HD/4K फाइल्स डालो - अच्छी क्वालिटी के लिए) -->
-        <!-- <source src="videos/my-video-4k.mp4" type="video/mp4" label="4K" res="2160"> -->
-        <!-- <source src="videos/my-video-hd.mp4" type="video/mp4" label="HD" res="1080"> -->
-        <!-- <source src="videos/my-video-720.mp4" type="video/mp4" label="720p" res="720"> -->
-        <!-- डिफॉल्ट सबटाइटल (अपना VTT डालो) -->
-        <track kind="subtitles" src="https://example.com/subtitles.vtt" srclang="hi" label="हिंदी" default>
-        <p class="vjs-no-js">वीडियो प्लेयर सपोर्ट नहीं करता।</p>
-      </video>
+// प्लेलिस्ट हैंडलिंग
+const videoList = document.getElementById('videoList');
+function addToPlaylist(name, src) {
+  const li = document.createElement('li');
+  li.textContent = name;
+  li.setAttribute('data-src', src);
+  li.addEventListener('click', function() {
+    videoList.querySelectorAll('li').forEach(i => i.classList.remove('active'));
+    this.classList.add('active');
+    player.src({ type: 'video/mp4', src: this.getAttribute('data-src') });
+    player.play();
+  });
+  videoList.appendChild(li);
+}
 
-      <!-- कस्टम कंट्रोल्स -->
-      <div class="custom-controls">
-        <label>लोकल वीडियो अपलोड (एक साथ कई):</label>
-        <input type="file" id="video-upload" accept="video/mp4" multiple>
-        <button id="load-video">लोड करो</button>
+// मौजूदा प्लेलिस्ट आइटम्स पर क्लिक हैंडलर
+const videoItems = document.querySelectorAll('#videoList li');
+videoItems.forEach(item => {
+  item.addEventListener('click', function() {
+    videoItems.forEach(i => i.classList.remove('active'));
+    this.classList.add('active');
+    const src = this.getAttribute('data-src');
+    player.src({ type: 'video/mp4', src: src });
+    player.play();
+  });
+});
 
-        <label>कस्टम सबटाइटल अपलोड:</label>
-        <input type="file" id="subtitle-upload" accept=".vtt,.srt">
-        <button id="add-subtitle">ऐड करो</button>
+// लोकल वीडियो अपलोड (मल्टीपल + 500MB लिमिट)
+const videoUpload = document.getElementById('video-upload');
+const loadVideoBtn = document.getElementById('load-video');
+const MAX_SIZE = 500 * 1024 * 1024;
+loadVideoBtn.addEventListener('click', () => {
+  const files = videoUpload.files;
+  if (files.length === 0) return;
 
-        <label>प्लेबैक स्पीड:</label>
-        <select id="speed-select">
-          <option value="0.25">0.25x</option>
-          <option value="0.5">0.5x</option>
-          <option value="1" selected>1x</option>
-          <option value="1.5">1.5x</option>
-          <option value="2">2x</option>
-          <option value="4">4x</option>
-          <option value="8">8x</option>
-        </select>
+  let totalSize = 0;
+  const validFiles = [];
 
-        <button id="fullscreen-btn">फुल स्क्रीन</button>
-      </div>
+  for (let file of files) {
+    totalSize += file.size;
+    if (totalSize > MAX_SIZE) {
+      alert('टोटल साइज 500MB से ज्यादा हो गया! बाकी फाइल्स लोड नहीं होंगी।');
+      break;
+    }
+    validFiles.push(file);
+  }
 
-      <!-- क्रेडिट -->
-      <p class="credit">Made by Bhai Gouri Shankar</p>
+  validFiles.forEach(file => {
+    const url = URL.createObjectURL(file);
+    addToPlaylist(file.name, url);
+  });
 
-      <!-- वार्निंग बॉक्स -->
-      <div class="warning-box">
-        लक्ष्य अश्लील वीडियो मत चलाना 😄
-      </div>
-    </div>
+  if (validFiles.length > 0) {
+    player.src({ type: 'video/mp4', src: URL.createObjectURL(validFiles[0]) });
+    player.play();
+    alert(`${validFiles.length} वीडियो लोड हो गए! (टोटल साइज: ${(totalSize / 1024 / 1024).toFixed(2)} MB)`);
+  }
+});
 
-    <!-- प्लेलिस्ट (ऑप्शनल, मल्टीपल वीडियो) -->
-    <div class="playlist">
-      <h2>वीडियो लिस्ट</h2>
-      <ul id="videoList">
-        <li class="active" data-src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4">टेस्ट वीडियो 1 (HD)</li>
-        <li data-src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4">वीडियो 2</li>
-        <!-- अपलोडेड फाइल्स यहाँ ऑटो ऐड होंगी -->
-      </ul>
-    </div>
-  </div>
+// सबटाइटल अपलोड
+const subtitleUpload = document.getElementById('subtitle-upload');
+const addSubtitleBtn = document.getElementById('add-subtitle');
+addSubtitleBtn.addEventListener('click', () => {
+  const file = subtitleUpload.files[0];
+  if (file) {
+    const url = URL.createObjectURL(file);
+    player.addRemoteTextTrack({
+      kind: 'subtitles',
+      label: 'कस्टम सबटाइटल',
+      srclang: 'hi',
+      src: url,
+      default: true
+    }, false);
+    alert('सबटाइटल ऐड हो गया!');
+  }
+});
 
-  <!-- Video.js स्क्रिप्ट -->
-  <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
-  <script src="script.js"></script>
-</body>
-</html>
+// स्पीड चेंज
+const speedSelect = document.getElementById('speed-select');
+speedSelect.addEventListener('change', () => {
+  player.playbackRate(parseFloat(speedSelect.value));
+});
+
+// फुल स्क्रीन
+const fullscreenBtn = document.getElementById('fullscreen-btn');
+fullscreenBtn.addEventListener('click', () => {
+  if (player.isFullscreen()) {
+    player.exitFullscreen();
+  } else {
+    player.requestFullscreen();
+  }
+});
+
+// रोटेट फिक्स (Android लैंडस्केप लॉक)
+const rotateBtn = document.getElementById('rotate-btn');
+rotateBtn.addEventListener('click', async () => {
+  if (!document.fullscreenElement) {
+    await player.requestFullscreen();
+  }
+  if (screen.orientation && screen.orientation.lock) {
+    try {
+      await screen.orientation.lock('landscape');
+      alert('स्क्रीन लैंडस्केप मोड में लॉक हो गया! (Android पर अच्छा काम करेगा)');
+    } catch (err) {
+      console.error('ओरिएंटेशन लॉक फेल: ', err);
+      alert('ओरिएंटेशन लॉक सपोर्ट नहीं करता ये डिवाइस/ब्राउजर।');
+    }
+  } else {
+    alert('ओरिएंटेशन API सपोर्ट नहीं।');
+  }
+});
