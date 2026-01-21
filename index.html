@@ -3,25 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"> <!-- Android ऑप्टिमाइज -->
-  <title>4K लोकल वीडियो प्लेयर - Android ऑप्टिमाइज्ड</title>
+  <title>4K लोकल वीडियो प्लेयर - Premium Android App जैसा</title>
   <!-- Video.js CDN -->
   <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#e91e63">
+  <link rel="apple-touch-icon" href="icons/icon-192x192.png"> <!-- ऐप आइकन (अपना इमेज बनाओ) -->
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
   <div class="container">
-    <h1>एडवांस 4K लोकल वीडियो प्लेयर (Android के लिए)</h1>
+    <h1>प्रीमियम 4K लोकल वीडियो प्लेयर (Android ऐप जैसा)</h1>
 
     <!-- मुख्य प्लेयर -->
     <div class="player-section">
-      <video id="my-video" class="video-js vjs-big-play-centered" controls preload="metadata" width="100%" height="500" poster="poster.jpg"> <!-- preload फिक्स -->
-        <!-- डिफॉल्ट सोर्स (टेस्ट के लिए, लोकल अपलोड के बाद चेंज होगा) -->
+      <video id="my-video" class="video-js vjs-big-play-centered vjs-fluid" controls preload="metadata" width="100%" height="500" poster="poster.jpg">
+        <!-- डिफॉल्ट सोर्स -->
         <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
-        <!-- मल्टीपल क्वालिटी ऐड करने का एक्जाम्पल (अपनी HD/4K फाइल्स डालो - अच्छी क्वालिटी के लिए) -->
+        <!-- मल्टीपल क्वालिटी -->
         <!-- <source src="videos/my-video-4k.mp4" type="video/mp4" label="4K" res="2160"> -->
         <!-- <source src="videos/my-video-hd.mp4" type="video/mp4" label="HD" res="1080"> -->
-        <!-- डिफॉल्ट सबटाइटल (अपना VTT डालो) -->
         <track kind="subtitles" src="https://example.com/subtitles.vtt" srclang="hi" label="हिंदी" default>
         <p class="vjs-no-js">वीडियो प्लेयर सपोर्ट नहीं करता।</p>
       </video>
@@ -48,7 +51,13 @@
         </select>
 
         <button id="fullscreen-btn">फुल स्क्रीन</button>
-        <button id="rotate-btn">स्क्रीन रोटेट (लैंडस्केप)</button> <!-- रोटेट फिक्स -->
+        <button id="rotate-btn">स्क्रीन रोटेट (लैंडस्केप)</button>
+      </div>
+
+      <!-- नेक्स्ट/प्रिवियस बटन -->
+      <div class="playlist-controls">
+        <button id="prev-video">पिछला वीडियो</button>
+        <button id="next-video">अगला वीडियो</button>
       </div>
 
       <!-- क्रेडिट -->
@@ -58,6 +67,9 @@
       <div class="warning-box">
         लक्ष्य अश्लील वीडियो मत चलाना 😄
       </div>
+
+      <!-- ऐप डाउनलोड बटन (PWA इंस्टॉल) -->
+      <button id="install-app-btn" style="display: none; background: #4caf50; color: white; padding: 10px; border-radius: 5px; margin-top: 20px;">ऐप डाउनलोड/इंस्टॉल करो</button>
     </div>
 
     <!-- प्लेलिस्ट -->
@@ -65,15 +77,23 @@
       <h2>वीडियो लिस्ट</h2>
       <ul id="videoList">
         <li class="active" data-src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4">टेस्ट वीडियो 1 (HD)</li>
-        <li data-src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4">वीडियो 2</li>
+        <li data-src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4">टेस्ट वीडियो 2</li>
       </ul>
     </div>
   </div>
 
   <!-- Video.js स्क्रिप्ट -->
   <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
-  <!-- Sprite Thumbnails प्लगिन CDN (Seek प्रिव्यू के लिए) -->
+  <!-- Sprite Thumbnails प्लगिन -->
   <script src="https://unpkg.com/videojs-sprite-thumbnails@latest/dist/videojs-sprite-thumbnails.min.js"></script>
   <script src="script.js"></script>
+  <!-- सर्विस वर्कर रजिस्टर (PWA के लिए) -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js')
+        .then(() => console.log('सर्विस वर्कर रजिस्टर हो गया!'))
+        .catch(err => console.error('सर्विस वर्कर एरर: ', err));
+    }
+  </script>
 </body>
   </html>
