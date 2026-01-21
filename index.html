@@ -18,9 +18,9 @@
       <video id="my-video" class="video-js vjs-big-play-centered" controls preload="auto" width="100%" height="500" poster="poster.jpg">
         <!-- डिफॉल्ट सोर्स (टेस्ट के लिए, लोकल अपलोड के बाद चेंज होगा) -->
         <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
-        <!-- मल्टीपल क्वालिटी ऐड करने का एक्जाम्पल (अपनी फाइल्स डालो) -->
+        <!-- मल्टीपल क्वालिटी ऐड करने का एक्जाम्पल (अपनी HD/4K फाइल्स डालो - अच्छी क्वालिटी के लिए) -->
         <!-- <source src="videos/my-video-4k.mp4" type="video/mp4" label="4K" res="2160"> -->
-        <!-- <source src="videos/my-video-1080.mp4" type="video/mp4" label="1080p" res="1080"> -->
+        <!-- <source src="videos/my-video-hd.mp4" type="video/mp4" label="HD" res="1080"> -->
         <!-- <source src="videos/my-video-720.mp4" type="video/mp4" label="720p" res="720"> -->
         <!-- डिफॉल्ट सबटाइटल (अपना VTT डालो) -->
         <track kind="subtitles" src="https://example.com/subtitles.vtt" srclang="hi" label="हिंदी" default>
@@ -29,8 +29,8 @@
 
       <!-- कस्टम कंट्रोल्स -->
       <div class="custom-controls">
-        <label>लोकल वीडियो अपलोड:</label>
-        <input type="file" id="video-upload" accept="video/mp4">
+        <label>लोकल वीडियो अपलोड (एक साथ कई):</label>
+        <input type="file" id="video-upload" accept="video/mp4" multiple>
         <button id="load-video">लोड करो</button>
 
         <label>कस्टम सबटाइटल अपलोड:</label>
@@ -56,7 +56,7 @@
 
       <!-- वार्निंग बॉक्स -->
       <div class="warning-box">
-        Don't play ashlil video
+        लक्ष्य अश्लील वीडियो मत चलाना 😄
       </div>
     </div>
 
@@ -66,7 +66,7 @@
       <ul id="videoList">
         <li class="active" data-src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4">टेस्ट वीडियो 1 (HD)</li>
         <li data-src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4">वीडियो 2</li>
-        <!-- लोकल फाइल्स ऐड करने के लिए data-src में लोकल पाथ डालो, लेकिन अपलोड फीचर से बेहतर -->
+        <!-- अपलोडेड फाइल्स यहाँ ऑटो ऐड होंगी -->
       </ul>
     </div>
   </div>
@@ -75,4 +75,4 @@
   <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
   <script src="script.js"></script>
 </body>
-</html>
+          </html>
