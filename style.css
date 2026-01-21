@@ -1,0 +1,74 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #111;
+  color: white;
+  margin: 0;
+  padding: 20px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.player-section {
+  flex: 3;
+  min-width: 300px;
+}
+
+.playlist {
+  flex: 1;
+  min-width: 250px;
+  background: #222;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+h1, h2 {
+  text-align: center;
+}
+
+#videoList li {
+  padding: 12px;
+  margin: 8px 0;
+  background: #333;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: 0.3s;
+}
+
+#videoList li:hover, #videoList li.active {
+  background: #e91e63;
+}
+
+.custom-controls {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.custom-controls label {
+  margin-right: 5px;
+}
+
+.custom-controls button, select {
+  padding: 8px;
+  background: #333;
+  color: white;
+  border: 1px solid #555;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.custom-controls button:hover {
+  background: #e91e63;
+}
+
+/* Video.js स्टाइल ओवरराइड (ऑप्शनल) */
+.video-js .vjs-control-bar {
+  background: rgba(0,0,0,0.7);
+}
