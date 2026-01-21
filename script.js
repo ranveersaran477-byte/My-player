@@ -18,6 +18,19 @@ videoItems.forEach(item => {
   });
 });
 
+// लोकल वीडियो अपलोड
+const videoUpload = document.getElementById('video-upload');
+const loadVideoBtn = document.getElementById('load-video');
+loadVideoBtn.addEventListener('click', () => {
+  const file = videoUpload.files[0];
+  if (file) {
+    const url = URL.createObjectURL(file);
+    player.src({ type: 'video/mp4', src: url });
+    player.play();
+    alert('लोकल वीडियो लोड हो गया! 4K तक सपोर्ट अगर फाइल हो।');
+  }
+});
+
 // कस्टम सबटाइटल अपलोड
 const subtitleUpload = document.getElementById('subtitle-upload');
 const addSubtitleBtn = document.getElementById('add-subtitle');
@@ -52,25 +65,4 @@ fullscreenBtn.addEventListener('click', () => {
   }
 });
 
-// ओरिएंटेशन लॉक (फोन तिरछा - लैंडस्केप)
-const rotateBtn = document.getElementById('rotate-btn');
-rotateBtn.addEventListener('click', async () => {
-  if (!document.fullscreenElement) {
-    await player.requestFullscreen();
-  }
-  if (screen.orientation && screen.orientation.lock) {
-    try {
-      await screen.orientation.lock('landscape');
-      alert('स्क्रीन लैंडस्केप मोड में लॉक हो गया!');
-    } catch (err) {
-      console.error('ओरिएंटेशन लॉक फेल: ', err);
-      alert('ओरिएंटेशन लॉक सपोर्ट नहीं करता ये डिवाइस/ब्राउजर।');
-    }
-  } else {
-    alert('ओरिएंटेशन API सपोर्ट नहीं।');
-  }
-});
-
-// ऑडियो ट्रैक चेंज (अगर वीडियो में मल्टीपल हों, Video.js ऑटो मेन्यू देता है)
-
-// अगर क्वालिटी स्विच ऐड करना हो, Video.js quality-selector प्लगिन ऐड करो (एक्स्ट्रा CDN)
+// ऑडियो ट्रैक चेंज (वीडियो में अगर मल्टीपल हों, Video.js ऑटो मेन्यू देता है)
