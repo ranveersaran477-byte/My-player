@@ -16,20 +16,18 @@
     <!-- मुख्य प्लेयर -->
     <div class="player-section">
       <video id="my-video" class="video-js vjs-big-play-centered" controls preload="auto" width="100%" height="500" poster="poster.jpg">
-        <source src="videos/my-video-4k.mp4" type="video/mp4">
-        <!-- मल्टीपल क्वालिटी सोर्स (ऑप्शनल, 4K/1080p/720p) -->
-        <!-- <source src="videos/my-video-4k.mp4" type="video/mp4" label="4K" res="2160"> -->
-        <!-- <source src="videos/my-video-1080.mp4" type="video/mp4" label="1080p" res="1080"> -->
-        <!-- <source src="videos/my-video-720.mp4" type="video/mp4" label="720p" res="720"> -->
-        <!-- डिफॉल्ट सबटाइटल -->
-        <track kind="subtitles" src="videos/subtitles.vtt" srclang="hi" label="हिंदी" default>
-        <!-- मल्टीपल ऑडियो ट्रैक्स (वीडियो में एम्बेडेड होने चाहिए) -->
+        <!-- टेस्ट के लिए फ्री HD MP4 URL (बदलकर अपना 4K डालो) -->
+        <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+        <!-- मल्टीपल क्वालिटी (अनकमेंट अगर यूज करो) -->
+        <!-- <source src="https://example.com/my-video-4k.mp4" type="video/mp4" label="4K" res="2160"> -->
+        <!-- <source src="https://example.com/my-video-1080.mp4" type="video/mp4" label="1080p" res="1080"> -->
+        <!-- डिफॉल्ट सबटाइटल (अपना VTT डालो) -->
+        <track kind="subtitles" src="https://example.com/subtitles.vtt" srclang="hi" label="हिंदी" default>
         <p class="vjs-no-js">वीडियो प्लेयर सपोर्ट नहीं करता।</p>
       </video>
 
       <!-- कस्टम कंट्रोल्स -->
-      <div class="custom-controls">fix error 
-        
+      <div class="custom-controls">
         <label>कस्टम सबटाइटल अपलोड:</label>
         <input type="file" id="subtitle-upload" accept=".vtt,.srt">
         <button id="add-subtitle">ऐड करो</button>
@@ -54,8 +52,8 @@
     <div class="playlist">
       <h2>वीडियो लिस्ट</h2>
       <ul id="videoList">
-        <li class="active" data-src="videos/my-video-4k.mp4">4K वीडियो 1</li>
-        <li data-src="videos/another-video.mp4">वीडियो 2</li>
+        <li class="active" data-src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4">टेस्ट वीडियो 1 (HD)</li>
+        <li data-src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4">वीडियो 2</li>
         <!-- और ऐड करो -->
       </ul>
     </div>
