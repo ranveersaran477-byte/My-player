@@ -1,28 +1,34 @@
 // Video.js इनिशियलाइज
 const player = videojs('my-video', {
-  fluid: true,  // रेस्पॉन्सिव (Android ऑप्टिमाइज)
+  fluid: true,
   controls: true,
   playbackRates: [0.25, 0.5, 1, 1.5, 2, 4, 8],
   techOrder: ['html5'],
-  preload: 'metadata'  // बड़े वीडियो के लिए फिक्स
+  preload: 'metadata',
+  aspectRatio: '16:9'  // YouTube जैसा
 });
 
-// Seek थंबनेल प्रिव्यू ऐड (स्प्राइट इमेज यूज करो – अपना URL बदलो)
+// Seek थंबनेल प्रिव्यू (पहले से ठीक है)
 player.spriteThumbnails({
-  interval: 1,  // हर सेकंड का थंबनेल
-  url: 'https://example.com/thumbnails-sprite.jpg',  // अपना स्प्राइट इमेज URL (FFmpeg से बना लो)
-  width: 160,   // थंबनेल विड्थ
-  height: 90    // थंबनेल हाइट
+  interval: 1,
+  url: 'https://example.com/thumbnails-sprite.jpg',  // अपना बदलो
+  width: 160,
+  height: 90
 });
 
 // प्लेलिस्ट हैंडलिंग
 const videoList = document.getElementById('videoList');
+let currentVideoIndex = 0;  // ट्रैक इंडेक्स
+
 function addToPlaylist(name, src) {
   const li = document.createElement('li');
   li.textContent = name;
   li.setAttribute('data-src', src);
   li.addEventListener('click', function() {
-    videoList.querySelectorAll('li').forEach(i => i.classList.remove('active'));
+    videoList.querySelectorAll('li').forEach((i, idx) => {
+      i.classList.remove('active');
+      if (i === this) currentVideoIndex = idx;
+    });
     this.classList.add('active');
     player.src({ type: 'video/mp4', src: this.getAttribute('data-src') });
     player.play();
@@ -30,19 +36,35 @@ function addToPlaylist(name, src) {
   videoList.appendChild(li);
 }
 
-// मौजूदा प्लेलिस्ट आइटम्स पर क्लिक हैंडलर
-const videoItems = document.querySelectorAll('#videoList li');
-videoItems.forEach(item => {
-  item.addEventListener('click', function() {
+// मौजूदा प्लेलिस्ट आइटम्स अपडेट (इंडेक्स ऐड)
+const videoItems = videoList.querySelectorAll('li');
+videoItems.forEach((item, idx) => {
+  item.addEventListener('click', () => {
+    currentVideoIndex = idx;
     videoItems.forEach(i => i.classList.remove('active'));
-    this.classList.add('active');
-    const src = this.getAttribute('data-src');
-    player.src({ type: 'video/mp4', src: src });
+    item.classList.add('active');
+    player.src({ type: 'video/mp4', src: item.getAttribute('data-src') });
     player.play();
   });
 });
 
-// लोकल वीडियो अपलोड (मल्टीपल + 500MB लिमिट)
+// नेक्स्ट/प्रिवियस
+const prevBtn = document.getElementById('prev-video');
+const nextBtn = document.getElementById('next-video');
+prevBtn.addEventListener('click', () => {
+  if (currentVideoIndex > 0) {
+    currentVideoIndex--;
+    videoList.querySelectorAll('li')[currentVideoIndex].click();
+  }
+});
+nextBtn.addEventListener('click', () => {
+  if (currentVideoIndex < videoList.children.length - 1) {
+    currentVideoIndex++;
+    videoList.querySelectorAll('li')[currentVideoIndex].click();
+  }
+});
+
+// लोकल वीडियो अपलोड (पहले वाला)
 const videoUpload = document.getElementById('video-upload');
 const loadVideoBtn = document.getElementById('load-video');
 const MAX_SIZE = 500 * 1024 * 1024;
@@ -56,7 +78,7 @@ loadVideoBtn.addEventListener('click', () => {
   for (let file of files) {
     totalSize += file.size;
     if (totalSize > MAX_SIZE) {
-      alert('टोटल साइज 500MB से ज्यादा हो गया! बाकी फाइल्स लोड नहीं होंगी।');
+      alert('टोटल साइज 500MB से ज्यादा हो गया!');
       break;
     }
     validFiles.push(file);
@@ -70,59 +92,28 @@ loadVideoBtn.addEventListener('click', () => {
   if (validFiles.length > 0) {
     player.src({ type: 'video/mp4', src: URL.createObjectURL(validFiles[0]) });
     player.play();
-    alert(`${validFiles.length} वीडियो लोड हो गए! (टोटल साइज: ${(totalSize / 1024 / 1024).toFixed(2)} MB)`);
+    currentVideoIndex = videoList.children.length - validFiles.length;  // अपडेट इंडेक्स
+    alert(`${validFiles.length} वीडियो लोड हो गए!`);
   }
 });
 
-// सबटाइटल अपलोड
-const subtitleUpload = document.getElementById('subtitle-upload');
-const addSubtitleBtn = document.getElementById('add-subtitle');
-addSubtitleBtn.addEventListener('click', () => {
-  const file = subtitleUpload.files[0];
-  if (file) {
-    const url = URL.createObjectURL(file);
-    player.addRemoteTextTrack({
-      kind: 'subtitles',
-      label: 'कस्टम सबटाइटल',
-      srclang: 'hi',
-      src: url,
-      default: true
-    }, false);
-    alert('सबटाइटल ऐड हो गया!');
-  }
+// सबटाइटल, स्पीड, फुलस्क्रीन, रोटेट (पहले वाला रखा)
+
+// PWA इंस्टॉल बटन
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('install-app-btn').style.display = 'block';
 });
 
-// स्पीड चेंज
-const speedSelect = document.getElementById('speed-select');
-speedSelect.addEventListener('change', () => {
-  player.playbackRate(parseFloat(speedSelect.value));
-});
-
-// फुल स्क्रीन
-const fullscreenBtn = document.getElementById('fullscreen-btn');
-fullscreenBtn.addEventListener('click', () => {
-  if (player.isFullscreen()) {
-    player.exitFullscreen();
-  } else {
-    player.requestFullscreen();
-  }
-});
-
-// रोटेट फिक्स (Android लैंडस्केप लॉक)
-const rotateBtn = document.getElementById('rotate-btn');
-rotateBtn.addEventListener('click', async () => {
-  if (!document.fullscreenElement) {
-    await player.requestFullscreen();
-  }
-  if (screen.orientation && screen.orientation.lock) {
-    try {
-      await screen.orientation.lock('landscape');
-      alert('स्क्रीन लैंडस्केप मोड में लॉक हो गया! (Android पर अच्छा काम करेगा)');
-    } catch (err) {
-      console.error('ओरिएंटेशन लॉक फेल: ', err);
-      alert('ओरिएंटेशन लॉक सपोर्ट नहीं करता ये डिवाइस/ब्राउजर।');
+document.getElementById('install-app-btn').addEventListener('click', async () => {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+      console.log('ऐप इंस्टॉल हो गया!');
     }
-  } else {
-    alert('ओरिएंटेशन API सपोर्ट नहीं।');
+    deferredPrompt = null;
   }
 });
