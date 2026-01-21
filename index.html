@@ -2,8 +2,8 @@
 <html lang="hi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>4K लोकल वीडियो प्लेयर - एडवांस फीचर्स</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"> <!-- Android ऑप्टिमाइज -->
+  <title>4K लोकल वीडियो प्लेयर - Android ऑप्टिमाइज्ड</title>
   <!-- Video.js CDN -->
   <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
   <link rel="stylesheet" href="style.css">
@@ -11,17 +11,16 @@
 <body>
 
   <div class="container">
-    <h1>एडवांस 4K लोकल वीडियो प्लेयर</h1>
+    <h1>एडवांस 4K लोकल वीडियो प्लेयर (Android के लिए)</h1>
 
     <!-- मुख्य प्लेयर -->
     <div class="player-section">
-      <video id="my-video" class="video-js vjs-big-play-centered" controls preload="auto" width="100%" height="500" poster="poster.jpg">
+      <video id="my-video" class="video-js vjs-big-play-centered" controls preload="metadata" width="100%" height="500" poster="poster.jpg"> <!-- preload फिक्स -->
         <!-- डिफॉल्ट सोर्स (टेस्ट के लिए, लोकल अपलोड के बाद चेंज होगा) -->
         <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
         <!-- मल्टीपल क्वालिटी ऐड करने का एक्जाम्पल (अपनी HD/4K फाइल्स डालो - अच्छी क्वालिटी के लिए) -->
         <!-- <source src="videos/my-video-4k.mp4" type="video/mp4" label="4K" res="2160"> -->
         <!-- <source src="videos/my-video-hd.mp4" type="video/mp4" label="HD" res="1080"> -->
-        <!-- <source src="videos/my-video-720.mp4" type="video/mp4" label="720p" res="720"> -->
         <!-- डिफॉल्ट सबटाइटल (अपना VTT डालो) -->
         <track kind="subtitles" src="https://example.com/subtitles.vtt" srclang="hi" label="हिंदी" default>
         <p class="vjs-no-js">वीडियो प्लेयर सपोर्ट नहीं करता।</p>
@@ -49,6 +48,7 @@
         </select>
 
         <button id="fullscreen-btn">फुल स्क्रीन</button>
+        <button id="rotate-btn">स्क्रीन रोटेट (लैंडस्केप)</button> <!-- रोटेट फिक्स -->
       </div>
 
       <!-- क्रेडिट -->
@@ -60,19 +60,20 @@
       </div>
     </div>
 
-    <!-- प्लेलिस्ट (ऑप्शनल, मल्टीपल वीडियो) -->
+    <!-- प्लेलिस्ट -->
     <div class="playlist">
       <h2>वीडियो लिस्ट</h2>
       <ul id="videoList">
         <li class="active" data-src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4">टेस्ट वीडियो 1 (HD)</li>
         <li data-src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4">वीडियो 2</li>
-        <!-- अपलोडेड फाइल्स यहाँ ऑटो ऐड होंगी -->
       </ul>
     </div>
   </div>
 
   <!-- Video.js स्क्रिप्ट -->
   <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
+  <!-- Sprite Thumbnails प्लगिन CDN (Seek प्रिव्यू के लिए) -->
+  <script src="https://unpkg.com/videojs-sprite-thumbnails@latest/dist/videojs-sprite-thumbnails.min.js"></script>
   <script src="script.js"></script>
 </body>
-          </html>
+  </html>
