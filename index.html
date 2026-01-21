@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>4K वीडियो प्लेयर - एडवांस फीचर्स</title>
+  <title>4K लोकल वीडियो प्लेयर - एडवांस फीचर्स</title>
   <!-- Video.js CDN -->
   <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
   <link rel="stylesheet" href="style.css">
@@ -11,16 +11,17 @@
 <body>
 
   <div class="container">
-    <h1>एडवांस 4K वीडियो प्लेयर</h1>
+    <h1>एडवांस 4K लोकल वीडियो प्लेयर</h1>
 
     <!-- मुख्य प्लेयर -->
     <div class="player-section">
       <video id="my-video" class="video-js vjs-big-play-centered" controls preload="auto" width="100%" height="500" poster="poster.jpg">
-        <!-- टेस्ट के लिए फ्री HD MP4 URL (बदलकर अपना 4K डालो) -->
+        <!-- डिफॉल्ट सोर्स (टेस्ट के लिए, लोकल अपलोड के बाद चेंज होगा) -->
         <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
-        <!-- मल्टीपल क्वालिटी (अनकमेंट अगर यूज करो) -->
-        <!-- <source src="https://example.com/my-video-4k.mp4" type="video/mp4" label="4K" res="2160"> -->
-        <!-- <source src="https://example.com/my-video-1080.mp4" type="video/mp4" label="1080p" res="1080"> -->
+        <!-- मल्टीपल क्वालिटी ऐड करने का एक्जाम्पल (अपनी फाइल्स डालो) -->
+        <!-- <source src="videos/my-video-4k.mp4" type="video/mp4" label="4K" res="2160"> -->
+        <!-- <source src="videos/my-video-1080.mp4" type="video/mp4" label="1080p" res="1080"> -->
+        <!-- <source src="videos/my-video-720.mp4" type="video/mp4" label="720p" res="720"> -->
         <!-- डिफॉल्ट सबटाइटल (अपना VTT डालो) -->
         <track kind="subtitles" src="https://example.com/subtitles.vtt" srclang="hi" label="हिंदी" default>
         <p class="vjs-no-js">वीडियो प्लेयर सपोर्ट नहीं करता।</p>
@@ -28,6 +29,10 @@
 
       <!-- कस्टम कंट्रोल्स -->
       <div class="custom-controls">
+        <label>लोकल वीडियो अपलोड:</label>
+        <input type="file" id="video-upload" accept="video/mp4">
+        <button id="load-video">लोड करो</button>
+
         <label>कस्टम सबटाइटल अपलोड:</label>
         <input type="file" id="subtitle-upload" accept=".vtt,.srt">
         <button id="add-subtitle">ऐड करो</button>
@@ -44,7 +49,14 @@
         </select>
 
         <button id="fullscreen-btn">फुल स्क्रीन</button>
-        <button id="rotate-btn">स्क्रीन रोटेट (लैंडस्केप)</button>
+      </div>
+
+      <!-- क्रेडिट -->
+      <p class="credit">Made by Bhai Gouri Shankar</p>
+
+      <!-- वार्निंग बॉक्स -->
+      <div class="warning-box">
+        Don't play ashlil video
       </div>
     </div>
 
@@ -54,7 +66,7 @@
       <ul id="videoList">
         <li class="active" data-src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4">टेस्ट वीडियो 1 (HD)</li>
         <li data-src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4">वीडियो 2</li>
-        <!-- और ऐड करो -->
+        <!-- लोकल फाइल्स ऐड करने के लिए data-src में लोकल पाथ डालो, लेकिन अपलोड फीचर से बेहतर -->
       </ul>
     </div>
   </div>
