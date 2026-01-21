@@ -1,14 +1,14 @@
 body {
-  font-family: Arial, sans-serif;
-  background: #111;
-  color: white;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: linear-gradient(to bottom, #121212, #1e1e1e); /* प्रीमियम डार्क ग्रेडिएंट */
+  color: #fff;
   margin: 0;
   padding: 20px;
-  touch-action: manipulation; /* Android टच ऑप्टिमाइज */
+  touch-action: manipulation;
 }
 
 .container {
-  max-width: 100%; /* मोबाइल के लिए */
+  max-width: 100%;
   margin: 0 auto;
   display: flex;
   flex-wrap: wrap;
@@ -17,7 +17,10 @@ body {
 
 .player-section {
   flex: 3;
-  min-width: 100%; /* Android पर फुल विड्थ */
+  min-width: 100%;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* प्रीमियम शैडो */
 }
 
 .playlist {
@@ -25,11 +28,14 @@ body {
   min-width: 100%;
   background: #222;
   padding: 15px;
-  border-radius: 10px;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 }
 
 h1, h2 {
   text-align: center;
+  font-weight: 300;
+  letter-spacing: 1px;
 }
 
 #videoList li {
@@ -37,13 +43,14 @@ h1, h2 {
   margin: 8px 0;
   background: #333;
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: 10px;
   transition: 0.3s;
-  touch-action: pan-y; /* टच स्क्रॉल बेहतर */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 #videoList li:hover, #videoList li.active {
-  background: #e91e63;
+  background: linear-gradient(to right, #e91e63, #f50057); /* प्रीमियम ग्लो */
+  transform: scale(1.02);
 }
 
 .custom-controls {
@@ -51,7 +58,7 @@ h1, h2 {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  justify-content: center; /* Android सेंटर */
+  justify-content: center;
 }
 
 .custom-controls label {
@@ -59,45 +66,103 @@ h1, h2 {
 }
 
 .custom-controls button, select {
-  padding: 8px;
-  background: #333;
+  padding: 10px 15px;
+  background: linear-gradient(to right, #333, #444);
   color: white;
-  border: 1px solid #555;
-  border-radius: 5px;
+  border: none;
+  border-radius: 25px;
   cursor: pointer;
-  font-size: 16px; /* मोबाइल बड़ा */
+  font-size: 16px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  transition: 0.3s;
 }
 
 .custom-controls button:hover {
+  background: linear-gradient(to right, #e91e63, #f50057);
+  transform: translateY(-2px);
+}
+
+.playlist-controls {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.playlist-controls button {
+  padding: 10px 20px;
+  background: #333;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.playlist-controls button:hover {
   background: #e91e63;
 }
 
-/* क्रेडिट */
-.credit {
+/* क्रेडिट और वार्निंग */
+.credit, .warning-box {
   text-align: center;
-  font-size: 14px;
   margin-top: 10px;
+  padding: 8px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.credit {
+  font-size: 14px;
   color: #aaa;
 }
 
-/* वार्निंग बॉक्स */
 .warning-box {
-  text-align: center;
   font-size: 12px;
-  margin-top: 10px;
-  padding: 8px;
-  background: #ff5722;
+  background: linear-gradient(to right, #ff5722, #f44336);
   color: #fff;
-  border-radius: 5px;
   width: fit-content;
   margin: 10px auto;
 }
 
-/* Video.js स्टाइल (मोबाइल थंबनेल प्रिव्यू) */
+/* Video.js कस्टमाइजेशन (YouTube जैसा) */
 .video-js .vjs-control-bar {
-  background: rgba(0,0,0,0.7);
+  background: rgba(0, 0, 0, 0.8); /* YouTube जैसा ट्रांसपेरेंट */
+  border-radius: 0 0 15px 15px;
+  height: 60px; /* बड़ी बार */
+  padding: 10px;
 }
 
-.vjs-sprite-thumbnails .vjs-time-tooltip {
-  display: block !important; /* मोबाइल पर फोर्स दिखाओ */
-  }
+.video-js .vjs-progress-control .vjs-progress-holder {
+  height: 10px; /* बड़ी टाइमलाइन लाइन */
+  background: #444;
+  border-radius: 5px;
+}
+
+.video-js .vjs-progress-control .vjs-play-progress {
+  background: #e91e63; /* YouTube रेड */
+  border-radius: 5px;
+}
+
+.video-js .vjs-progress-control:hover .vjs-progress-holder {
+  height: 15px; /* ड्रैग पर और बड़ी */
+}
+
+.video-js .vjs-time-tooltip {
+  background: #e91e63;
+  color: white;
+  border-radius: 5px;
+}
+
+.video-js .vjs-fullscreen-control, .video-js .vjs-playback-rate .vjs-playback-rate-value {
+  color: white; /* स्पीड और फुलस्क्रीन YouTube जैसा */
+}
+
+.video-js.vjs-fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 9999; /* YouTube जैसा फुल स्क्रीन */
+  background: black;
+}
